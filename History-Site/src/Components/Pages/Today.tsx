@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { HistoryData } from '../Types/History';
+import EventCard from '../EventCard/EventCard';
 
 function Today() {
   const [data, setData] = useState<HistoryData | null>(null);
@@ -7,7 +8,6 @@ function Today() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch data når komponenten loader
     fetch('https://history.muffinlabs.com/date')
       .then(response => response.json())
       .then((data: HistoryData) => {
@@ -27,13 +27,27 @@ function Today() {
   return (
     <div>
       <h1>Today in History - {data.date}</h1>
-      <h2>Events</h2>
-      {/* Vi viser kun de første 10 events for nu */}
-      {data.data.Events.slice(0, 10).map((event, index) => (
-        <div key={index}>
-          <strong>{event.year}</strong>: {event.text}
-        </div>
-      ))}
+      
+      <section>
+        <h2>Events</h2>
+        {data.data.Events.slice(0, 10).map((event, index) => (
+          <EventCard key={index} event={event} />
+        ))}
+      </section>
+
+      <section>
+        <h2>Births</h2>
+        {data.data.Births.slice(0, 10).map((event, index) => (
+          <EventCard key={index} event={event} />
+        ))}
+      </section>
+
+      <section>
+        <h2>Deaths</h2>
+        {data.data.Deaths.slice(0, 10).map((event, index) => (
+          <EventCard key={index} event={event} />
+        ))}
+      </section>
     </div>
   );
 }
