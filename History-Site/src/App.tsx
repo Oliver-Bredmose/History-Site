@@ -3,6 +3,7 @@ import Today from './Components/Pages/Today';
 import ByDate from './Components/Pages/ByDate';
 import Since from './Components/Pages/Since';
 import ThemeToggle from './Components/ThemeToggle/ThemeToggle';
+import BackToTop from './Components/BackToTop/BackToTop';
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
           <Route path="/by-date" element={<ByDate />} />
           <Route path="/since" element={<Since />} />
         </Routes>
+
+        <BackToTop />
       </div>
     </BrowserRouter>
   );
