@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import Today from './Pages/Today';
-import ByDate from './Pages/ByDate';
-import Since from './Pages/Since';
+import Today from './Components/Pages/Today';
+import ByDate from './Components/Pages/ByDate';
+import Since from './Components/Pages/Since';
 
 function App() {
   return (

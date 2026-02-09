@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { HistoryData } from '../Types/History';
+import type { HistoryData } from '../Types/History';
 
 function Today() {
   const [data, setData] = useState<HistoryData | null>(null);
