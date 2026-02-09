@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './ThemeToggle.module.scss';
+import themeIcon from '../../assets/theme-icon.png';
 
 function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -21,8 +22,8 @@ function ThemeToggle() {
   };
 
   return (
-    <button onClick={toggleTheme} className={styles.themeToggle}>
-      {theme === 'light' ? '🌙' : '☀️'}
+    <button onClick={toggleTheme} className={styles.themeToggle} aria-label="Toggle theme">
+      <img src={themeIcon} alt="Theme toggle" className={styles.icon} />
     </button>
   );
 }

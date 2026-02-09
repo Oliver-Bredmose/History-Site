@@ -17,7 +17,7 @@ function EventCard({ event }: EventCardProps) {
           rel="noopener noreferrer"
           className={styles.readMore}
         >
-          Read more →
+          Read more
         </a>
       )}
     </div>
