@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { HistoryData, HistoryEvent } from '../../Components/Types/History';
+import type { HistoryData, } from '../../Components/Types/History';
 import EventCard from '../EventCard/EventCard';
 
 function Today() {
@@ -34,10 +34,10 @@ function Today() {
       const documentHeight = document.documentElement.scrollHeight;
       
       if (scrollTop + windowHeight >= documentHeight - 100) {
-        // Load 10 mere af hver kategori
-        setVisibleEventsCount(prev => prev + 10);
-        setVisibleBirthsCount(prev => prev + 10);
-        setVisibleDeathsCount(prev => prev + 10);
+        // Loader 10 af hver kategori
+        setVisibleEventsCount(prev => prev + 5);
+        setVisibleBirthsCount(prev => prev + 5);
+        setVisibleDeathsCount(prev => prev + 5);
       }
     };
 
