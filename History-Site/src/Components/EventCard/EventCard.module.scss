@@ -1,4 +1,121 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Jura:wght@300..700&family=Limelight&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Smooch+Sans:wght@100..900&display=swap');
+// Timeline card container
+.card {
+  padding: 10px 40px;
+  position: relative;
+  background-color: inherit;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Jura:wght@300..700&family=Limelight&family=Linden+Hill:ital@0;1&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Smooch+Sans:wght@100..900&display=swap');
+  // Circle på timeline
+  &::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    right: -13px;
+    background-color: #C7BD8D;
+    border: 4px solid var(--bg-color);
+    top: 15px;
+    border-radius: 50%;
+    z-index: 2;
+  }
 
+  // Pil til venstre (pointing right)
+  &.left {
+    left: 0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      height: 0;
+      width: 0;
+      z-index: 1;
+      right: 30px;
+      top: 22px;
+      border: medium solid var(--text-color);
+      border-width: 10px 0 10px 10px;
+      border-color: transparent transparent transparent var(--text-color);
+    }
+  }
+
+  // Pil til højre (pointing left)
+  &.right {
+    left: 50%;
+
+    &::before {
+      content: '';
+      position: absolute;
+      height: 0;
+      width: 0;
+      z-index: 1;
+      left: 30px;
+      top: 22px;
+      border: medium solid var(--text-color);
+      border-width: 10px 10px 10px 0;
+      border-color: transparent var(--text-color) transparent transparent;
+    }
+
+    &::after {
+      left: -17px;
+    }
+  }
+}
+
+.year {
+  font-weight: bold;
+  color: white;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  max-width: 300px;
+}
+
+.readMore {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.readMoreIcon {
+  width: 12px;
+  height: 12px;
+  margin-left: 0.3rem;
+}
+
+// Responsive - mindre skærme
+@media (max-width: 600px) {
+  .card {
+    width: 100%;
+    padding-left: 70px;
+    padding-right: 25px;
+
+    &::before {
+      left: 60px;
+      border: medium solid var(--text-color);
+      border-width: 10px 10px 10px 0;
+      border-color: transparent var(--text-color) transparent transparent;
+    }
+
+    &.left,
+    &.right {
+      left: 0 !important;
+
+      &::after {
+        left: 15px;
+      }
+    }
+  }
+}
