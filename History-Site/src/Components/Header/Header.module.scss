@@ -1,0 +1,145 @@
+.header {
+  margin: -2rem -2rem 2rem -2rem;
+  background-color: var(--bg-color);
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  
+  @media (max-width: 768px) {
+    height: 400px;
+  }
+}
+
+.headerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  position: relative;
+  background-color: rgba(50, 50, 50, 0.85);
+  padding: 3rem 4rem;
+  text-align: center;
+  max-width: 700px;
+  
+  @media (max-width: 768px) {
+    padding: 2rem 2.5rem;
+    max-width: 90%;
+  }
+}
+
+.cardCorner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: #c9b896;
+  border-radius: 50%;
+  
+  &:nth-child(1) {
+    top: 15px;
+    left: 15px;
+  }
+  
+  &:nth-child(2) {
+    top: 15px;
+    right: 15px;
+  }
+  
+  &:nth-child(3) {
+    bottom: 15px;
+    left: 15px;
+  }
+  
+  &:nth-child(4) {
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
+.title {
+  color: #c9b896;
+  font-size: 3.5rem;
+  font-weight: bold;
+  letter-spacing: 0.2rem;
+  margin: 0 0 1rem 0;
+  font-family: 'Georgia', serif;
+  
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
+}
+
+.subtitle {
+  color: #c9b896;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  font-family: 'Georgia', serif;
+  
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+}
+
+.navContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  padding: 2rem;
+  background-color: rgba(50, 50, 50, 0.95);
+  position: relative;
+  
+  @media (max-width: 768px) {
+    gap: 2rem;
+    padding: 1.5rem;
+  }
+}
+
+.navLink {
+  color: #c9b896;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
+  padding: 0.5rem 0;
+  transition: color 0.2s;
+  border-bottom: 2px solid transparent;
+  font-family: 'Georgia', serif;
+  
+  &:hover {
+    border-bottom: 2px solid #c9b896;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+// Tema toggle i højre hjørne
+.navContainer > :last-child {
+  position: absolute;
+  right: 2rem;
+  
+  @media (max-width: 768px) {
+    position: static;
+    margin-left: auto;
+  }
+}
