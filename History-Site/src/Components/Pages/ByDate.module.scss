@@ -5,7 +5,7 @@
   margin: 0 auto;
   padding: 2rem 0;
 
-  // Vertikal guld linje gennem hele timeline'n
+  // Linje gennem hele timeline
   &::after {
     content: '';
     position: absolute;
@@ -48,7 +48,7 @@ input[type="date"] {
   }
 }
 
-// Loading / Error / Empty states
+// Loading Error 
 .loadingMessage,
 .errorMessage,
 .emptyMessage {
