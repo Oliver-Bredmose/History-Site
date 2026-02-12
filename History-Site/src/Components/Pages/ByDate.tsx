@@ -1,44 +1,98 @@
 import { useEffect, useState } from 'react';
-import type { HistoryData } from '../../Components/Types/History';
+import type { HistoryData } from '../Types/History';
 import EventCard from '../EventCard/EventCard';
 import styles from './ByDate.module.scss';
 
-function ByDate() {
-  const [selectedDate, setSelectedDate] = useState('');
+interface ByDateProps {
+  onDateChange?: (date: string) => void;
+}
+
+function ByDate({ onDateChange }: ByDateProps) {
   const [data, setData] = useState<HistoryData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  
+  // Lazy loading states
   const [visibleEventsCount, setVisibleEventsCount] = useState(10);
   const [visibleBirthsCount, setVisibleBirthsCount] = useState(10);
   const [visibleDeathsCount, setVisibleDeathsCount] = useState(10);
 
-  useEffect(() => {
-    if (!selectedDate) return;
+  const fetchDataForDate = (dateString: string) => {
+    if (!dateString) return;
+    
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    
+    // Send datoen til Header (dd/mm format)
+    if (onDateChange) {
+      const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}`;
+      onDateChange(formattedDate);
+    }
     
     setLoading(true);
+    setError(null);
     
-    // Konverter 2025-01-15 til 01/15
-    const parts = selectedDate.split('-');
-    const formattedDate = `${parts[1]}/${parts[2]}`;
-    
-    // Fetch fra API med den formaterede dato
-    fetch(`https://history.muffinlabs.com/date/${formattedDate}`)
+    fetch(`https://history.muffinlabs.com/date/${month}/${day}`)
       .then(response => response.json())
       .then((data: HistoryData) => {
         setData(data);
         setLoading(false);
-        // Reset lazy loading counts når ny dato vælges
-        setVisibleEventsCount(1);
-        setVisibleBirthsCount(1);
-        setVisibleDeathsCount(1);
+        setVisibleEventsCount(10);
+        setVisibleBirthsCount(10);
+        setVisibleDeathsCount(10);
       })
       .catch(err => {
         setError(err.message);
         setLoading(false);
       });
+  };
+
+  const fetchDataFromDayMonth = (day: number, month: number) => {
+    setLoading(true);
+    setError(null);
+    
+    fetch(`https://history.muffinlabs.com/date/${month}/${day}`)
+      .then(response => response.json())
+      .then((data: HistoryData) => {
+        setData(data);
+        setLoading(false);
+        setVisibleEventsCount(10);
+        setVisibleBirthsCount(10);
+        setVisibleDeathsCount(10);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  };
+
+  // Lyt til ændringer fra Header komponenten
+  useEffect(() => {
+    const handleHeaderDateChange = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const dateStr = customEvent.detail; // Format: "dd/mm"
+      const [day, month] = dateStr.split('/').map(Number);
+      
+      if (day && month && day >= 1 && day <= 31 && month >= 1 && month <= 12) {
+        fetchDataFromDayMonth(day, month);
+      }
+    };
+    
+    window.addEventListener('headerDateChange', handleHeaderDateChange);
+    
+    return () => {
+      window.removeEventListener('headerDateChange', handleHeaderDateChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (selectedDate) {
+      fetchDataForDate(selectedDate);
+    }
   }, [selectedDate]);
 
-  // Scroll listener for lazy loading
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -46,9 +100,9 @@ function ByDate() {
       const documentHeight = document.documentElement.scrollHeight;
       
       if (scrollTop + windowHeight >= documentHeight - 100) {
-        setVisibleEventsCount(prev => prev + 5);
-        setVisibleBirthsCount(prev => prev + 5);
-        setVisibleDeathsCount(prev => prev + 5);
+        setVisibleEventsCount(prev => prev + 10);
+        setVisibleBirthsCount(prev => prev + 10);
+        setVisibleDeathsCount(prev => prev + 10);
       }
     };
 
@@ -56,61 +110,58 @@ function ByDate() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedDate(e.target.value);
-  };
-
   return (
-    <div>
-      <h1>By Date</h1>
-      <input type="date" onChange={handleDateChange} />
-      
-      {loading && <div className={styles.loadingMessage}>Loading...</div>}
-      {error && <div className={styles.errorMessage}>Error: {error}</div>}
-      
-      {data && (
+    <div className={styles.container}>
+      {loading && <div className={styles.loading}>Loading...</div>}
+      {error && <div className={styles.error}>Error: {error}</div>}
+
+      {data && !loading && (
         <>
-          <section>
-            <h2>Events ({data.data.Events.length})</h2>
-            <div className={styles.timelineContainer}>
+          <div className={styles.summary}>
+            Showing events for <strong>{data.date}</strong>
+          </div>
+
+          {data.data.Events.length > 0 && (
+            <section>
+              <h2>Events ({data.data.Events.length})</h2>
               {data.data.Events.slice(0, visibleEventsCount).map((event, index) => (
-                <EventCard key={index} event={event} position={index % 2 === 0 ? 'left' : 'right'} />
+                <EventCard key={index} event={event} />
               ))}
-            </div>
-            {visibleEventsCount < data.data.Events.length && (
-              <p className={styles.scrollIndicator}>
-                Scroll for more...
-              </p>
-            )}
-          </section>
+              {visibleEventsCount < data.data.Events.length && (
+                <p style={{ textAlign: 'center', color: 'var(--text-color)' }}>
+                  Scroll for more...
+                </p>
+              )}
+            </section>
+          )}
 
-          <section>
-            <h2>Births ({data.data.Births.length})</h2>
-            <div className={styles.timelineContainer}>
+          {data.data.Births.length > 0 && (
+            <section>
+              <h2>Births ({data.data.Births.length})</h2>
               {data.data.Births.slice(0, visibleBirthsCount).map((event, index) => (
-                <EventCard key={index} event={event} position={index % 2 === 0 ? 'left' : 'right'} />
+                <EventCard key={index} event={event} />
               ))}
-            </div>
-            {visibleBirthsCount < data.data.Births.length && (
-              <p className={styles.scrollIndicator}>
-                Scroll for more...
-              </p>
-            )}
-          </section>
+              {visibleBirthsCount < data.data.Births.length && (
+                <p style={{ textAlign: 'center', color: 'var(--text-color)' }}>
+                  Scroll for more...
+                </p>
+              )}
+            </section>
+          )}
 
-          <section>
-            <h2>Deaths ({data.data.Deaths.length})</h2>
-            <div className={styles.timelineContainer}>
+          {data.data.Deaths.length > 0 && (
+            <section>
+              <h2>Deaths ({data.data.Deaths.length})</h2>
               {data.data.Deaths.slice(0, visibleDeathsCount).map((event, index) => (
-                <EventCard key={index} event={event} position={index % 2 === 0 ? 'left' : 'right'} />
+                <EventCard key={index} event={event} />
               ))}
-            </div>
-            {visibleDeathsCount < data.data.Deaths.length && (
-              <p className={styles.scrollIndicator}>
-                Scroll for more...
-              </p>
-            )}
-          </section>
+              {visibleDeathsCount < data.data.Deaths.length && (
+                <p style={{ textAlign: 'center', color: 'var(--text-color)' }}>
+                  Scroll for more...
+                </p>
+              )}
+            </section>
+          )}
         </>
       )}
     </div>

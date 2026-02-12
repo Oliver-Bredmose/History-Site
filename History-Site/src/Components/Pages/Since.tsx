@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import type { HistoryData, HistoryEvent } from '../Types/History';
-import EventCard from '../../Components/EventCard/EventCard';
+import EventCard from '../EventCard/EventCard';
 import styles from './Since.module.scss';
 
-function Since() {
+interface SinceProps {
+  year: string;
+}
+
+function Since({ year }: SinceProps) {
   const [data, setData] = useState<HistoryData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [year, setYear] = useState<string>('');
   const [filteredEvents, setFilteredEvents] = useState<HistoryEvent[]>([]);
   const [filteredBirths, setFilteredBirths] = useState<HistoryEvent[]>([]);
   const [filteredDeaths, setFilteredDeaths] = useState<HistoryEvent[]>([]);
@@ -16,14 +19,6 @@ function Since() {
   const [visibleEventsCount, setVisibleEventsCount] = useState(10);
   const [visibleBirthsCount, setVisibleBirthsCount] = useState(10);
   const [visibleDeathsCount, setVisibleDeathsCount] = useState(10);
-
-  useEffect(() => {
-    // Send det valgte år til parent (App)
-    if (year) {
-      // Trigger en custom event så Header kan lytte
-      window.dispatchEvent(new CustomEvent('sinceYearChange', { detail: year }));
-    }
-  }, [year]);
 
   useEffect(() => {
     fetch('https://history.muffinlabs.com/date')
@@ -78,33 +73,11 @@ function Since() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className={styles.container}> 
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.inputGroup}>
-          <label htmlFor="year" className={styles.label}>
-            Select a year:
-          </label>
-          <input
-            type="number"
-            id="year"
-            min="1"
-            max={new Date().getFullYear()}
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
-            placeholder="e.g., 1900"
-            className={styles.input}
-          />
-        </div>
-      </form>
-
+    <div className={styles.container}>
       {year && (
         <>
           <div className={styles.summary}>
@@ -162,4 +135,4 @@ function Since() {
   );
 }
 
-export default Since
+export default Since;

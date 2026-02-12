@@ -4,34 +4,78 @@ import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import styles from './Header.module.scss';
 import headerImage from '../../assets/History-image.avif';
 
-function Header() {
+interface HeaderProps {
+  onSinceYearChange?: (year: string) => void;
+  onByDateChange?: (date: string) => void;
+}
+
+function Header({ onSinceYearChange, onByDateChange }: HeaderProps) {
   const location = useLocation();
   const [sinceYear, setSinceYear] = useState<string>('1947');
+  const [byDate, setByDate] = useState<string>('12/02');
+  const [isEditingYear, setIsEditingYear] = useState(false);
+  const [isEditingDate, setIsEditingDate] = useState(false);
   
-  // Nulstil år når du forlader Since siden
+  // Nulstil når du forlader siderne
   useEffect(() => {
     if (location.pathname !== '/since') {
       setSinceYear('1947');
+      setIsEditingYear(false);
+    }
+    if (location.pathname !== '/by-date') {
+      setByDate('12/02');
+      setIsEditingDate(false);
     }
   }, [location.pathname]);
-  
-  // Lyt til år ændringer fra Since siden
-  useEffect(() => {
-    const handleYearChange = (event: Event) => {
-      const customEvent = event as CustomEvent;
-      setSinceYear(customEvent.detail);
-    };
-    
-    window.addEventListener('sinceYearChange', handleYearChange);
-    
-    return () => {
-      window.removeEventListener('sinceYearChange', handleYearChange);
-    };
-  }, []);
   
   const isTodayPage = location.pathname === '/';
   const isByDatePage = location.pathname === '/by-date';
   const isSincePage = location.pathname === '/since';
+
+  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newYear = e.target.value;
+    setSinceYear(newYear);
+    if (onSinceYearChange) {
+      onSinceYearChange(newYear);
+    }
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const newDate = e.target.value;
+  setByDate(newDate);
+  if (onByDateChange) {
+    onByDateChange(newDate);
+  }
+  
+  // Dispatch event så ByDate kan lytte
+  window.dispatchEvent(new CustomEvent('headerDateChange', { detail: newDate }));
+};;
+
+  const handleYearClick = () => {
+    if (isSincePage) {
+      setIsEditingYear(true);
+    }
+  };
+
+  const handleDateClick = () => {
+    if (isByDatePage) {
+      setIsEditingDate(true);
+    }
+  };
+
+  const handleYearBlur = () => {
+    setIsEditingYear(false);
+    if (!sinceYear) {
+      setSinceYear('1947');
+    }
+  };
+
+  const handleDateBlur = () => {
+    setIsEditingDate(false);
+    if (!byDate) {
+      setByDate('12/02');
+    }
+  };
 
   return (
     <header className={styles.header}>
@@ -56,7 +100,28 @@ function Header() {
             
             {isByDatePage && (
               <>
-                <h1 className={styles.title}>BY DATE</h1>
+                <h1 className={styles.title}>
+                  BY DATE:{' '}
+                  {isEditingDate ? (
+                    <input
+                      type="text"
+                      value={byDate}
+                      onChange={handleDateChange}
+                      onBlur={handleDateBlur}
+                      autoFocus
+                      placeholder="DD/MM"
+                      maxLength={5}
+                      className={styles.dateInput}
+                    />
+                  ) : (
+                    <span 
+                      className={styles.yearUnderline}
+                      onClick={handleDateClick}
+                    >
+                      {byDate}
+                    </span>
+                  )}
+                </h1>
                 <p className={styles.subtitle}>
                   What happened on this day - Here you can enter<br />
                   a specific date to get only events for that date
@@ -67,7 +132,26 @@ function Header() {
             {isSincePage && (
               <>
                 <h1 className={styles.title}>
-                  SINCE: <span className={styles.yearUnderline}>{sinceYear}</span>
+                  SINCE:{' '}
+                  {isEditingYear ? (
+                    <input
+                      type="number"
+                      value={sinceYear}
+                      onChange={handleYearChange}
+                      onBlur={handleYearBlur}
+                      autoFocus
+                      min="1"
+                      max={new Date().getFullYear()}
+                      className={styles.yearInput}
+                    />
+                  ) : (
+                    <span 
+                      className={styles.yearUnderline}
+                      onClick={handleYearClick}
+                    >
+                      {sinceYear}
+                    </span>
+                  )}
                 </h1>
                 <p className={styles.subtitle}>
                   What happened on this day - Here you can enter<br />

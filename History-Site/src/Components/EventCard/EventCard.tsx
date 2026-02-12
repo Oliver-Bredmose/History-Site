@@ -4,12 +4,13 @@ import readMoreIcon from '../../assets/readmore.png';
 
 interface EventCardProps {
   event: HistoryEvent;
-  position: 'left' | 'right';  // ← Tilføj dette
+  position?: "left" | "right";
 }
+
 
 function EventCard({ event, position }: EventCardProps) {
   return (
-    <div className={`${styles.card} ${styles[position]}`}>
+    <div className={`${styles.card} ${position ? styles[position] : ""}`}>
       <div className={styles.year}>{event.year}</div>
       <p className={styles.text}>{event.text}</p>
       {event.links.length > 0 && (

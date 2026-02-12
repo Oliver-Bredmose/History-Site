@@ -128,12 +128,17 @@
     border-bottom: 2px solid #c9b896;
   }
   
+  &.active {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 8px;
+  }
+  
   @media (max-width: 768px) {
     font-size: 1rem;
   }
 }
 
-// Tema toggle i højre hjørne
 .navContainer > :last-child {
   position: absolute;
   right: 2rem;
@@ -141,5 +146,63 @@
   @media (max-width: 768px) {
     position: static;
     margin-left: auto;
+  }
+}
+
+.yearUnderline {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.yearInput {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid #c9b896;
+  color: #c9b896;
+  font-size: 3.5rem;
+  font-weight: bold;
+  font-family: 'Georgia', serif;
+  letter-spacing: 0.2rem;
+  width: 250px;
+  text-align: center;
+  outline: none;
+
+  .dateInput {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid #c9b896;
+  color: #c9b896;
+  font-size: 3.5rem;
+  font-weight: bold;
+  font-family: 'Georgia', serif;
+  letter-spacing: 0.2rem;
+  width: 200px;
+  text-align: center;
+  outline: none;
+  
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+    width: 150px;
+  }
+}
+  
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  -moz-appearance: textfield;
+  
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+    width: 180px;
   }
 }
