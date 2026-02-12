@@ -86,9 +86,7 @@ function Since() {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className={styles.container}>
-      <h1>Events Since Year</h1>
-      
+    <div className={styles.container}> 
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.inputGroup}>
           <label htmlFor="year" className={styles.label}>
@@ -164,4 +162,4 @@ function Since() {
   );
 }
 
-export default Since;
+export default Since
