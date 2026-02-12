@@ -5,23 +5,16 @@ import styles from './Header.module.scss';
 import headerImage from '../../assets/History-image.avif';
 
 interface HeaderProps {
-  onSinceYearChange?: (year: string) => void;
   onByDateChange?: (date: string) => void;
 }
 
-function Header({ onSinceYearChange, onByDateChange }: HeaderProps) {
+function Header({ onByDateChange }: HeaderProps) {
   const location = useLocation();
-  const [sinceYear, setSinceYear] = useState<string>('1947');
   const [byDate, setByDate] = useState<string>('12/02');
-  const [isEditingYear, setIsEditingYear] = useState(false);
   const [isEditingDate, setIsEditingDate] = useState(false);
   
   // Nulstil når du forlader siderne
   useEffect(() => {
-    if (location.pathname !== '/since') {
-      setSinceYear('1947');
-      setIsEditingYear(false);
-    }
     if (location.pathname !== '/by-date') {
       setByDate('12/02');
       setIsEditingDate(false);
@@ -32,41 +25,20 @@ function Header({ onSinceYearChange, onByDateChange }: HeaderProps) {
   const isByDatePage = location.pathname === '/by-date';
   const isSincePage = location.pathname === '/since';
 
-  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newYear = e.target.value;
-    setSinceYear(newYear);
-    if (onSinceYearChange) {
-      onSinceYearChange(newYear);
-    }
-  };
-
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const newDate = e.target.value;
-  setByDate(newDate);
-  if (onByDateChange) {
-    onByDateChange(newDate);
-  }
-  
-  // Dispatch event så ByDate kan lytte
-  window.dispatchEvent(new CustomEvent('headerDateChange', { detail: newDate }));
-};;
-
-  const handleYearClick = () => {
-    if (isSincePage) {
-      setIsEditingYear(true);
+    const newDate = e.target.value;
+    setByDate(newDate);
+    if (onByDateChange) {
+      onByDateChange(newDate);
     }
+    
+    // Dispatch event så ByDate kan lytte
+    window.dispatchEvent(new CustomEvent('headerDateChange', { detail: newDate }));
   };
 
   const handleDateClick = () => {
     if (isByDatePage) {
       setIsEditingDate(true);
-    }
-  };
-
-  const handleYearBlur = () => {
-    setIsEditingYear(false);
-    if (!sinceYear) {
-      setSinceYear('1947');
     }
   };
 
