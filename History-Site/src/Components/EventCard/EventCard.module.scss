@@ -48,7 +48,7 @@
   margin: 0 auto;
 }
 
-/* The actual timeline (the vertical ruler) */
+/* timeline (den verticale linje) */
 .timeline::after {
   content: '';
   position: absolute;
@@ -60,12 +60,12 @@
   margin-left: -3px;
 }
 
-
 .year {
+  font-size: 1.25rem;
   font-weight: bold;
   color: white;
-  font-size: 0.9rem;
   margin-bottom: 0.5rem;
+  font-family: 'Limelight', cursive; // Match header stil
 }
 
 .left .year{
@@ -73,29 +73,24 @@
 }
 
 .text {
-  font-size: 0.9rem;
-  line-height: 1.5;
-  max-width: 300px;
+  color: var(--text-color);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-family: 'Linden Hill', serif; 
 }
 
-/* Place the container to the left */
 .left {
   left: 0;
 }
 
-/* Place the container to the right */
 .right {
   left: 50%;
 }
 
-
-
-/* Fix the circle for containers on the right side */
 .right::after {
   left: -16px;
 }
 
-/* The actual content */
 .content {
   padding: 20px 30px;
   background-color: white;
@@ -104,14 +99,11 @@
 }
 
 .readMore {
-  color: var(--text-color);
+  color: white;
   text-decoration: none;
-  font-size: 0.85rem;
-  margin-top: 0.5rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-
+  font-weight: 500;
+  font-family: 'Linden Hill', serif;
+  
   &:hover {
     text-decoration: underline;
   }
@@ -123,7 +115,6 @@
   margin-left: 0.3rem;
 }
 
-// Responsive - mindre skærme
 @media (max-width: 600px) {
   .card {
     width: 100%;

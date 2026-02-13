@@ -79,7 +79,7 @@
   font-weight: bold;
   letter-spacing: 0.2rem;
   margin: 0 0 1rem 0;
-  font-family: 'Georgia', serif;
+  font-family: 'Limelight', cursive; // Art Deco stil
   
   @media (max-width: 768px) {
     font-size: 2.5rem;
@@ -91,7 +91,7 @@
   font-size: 1rem;
   line-height: 1.6;
   margin: 0;
-  font-family: 'Georgia', serif;
+  font-family: 'Linden Hill', serif; // Klassisk serif
   
   @media (max-width: 768px) {
     font-size: 0.9rem;
@@ -198,8 +198,6 @@
     -webkit-appearance: none;
     margin: 0;
   }
-  
-  -moz-appearance: textfield;
   
   @media (max-width: 768px) {
     font-size: 2.5rem;
