@@ -10,6 +10,43 @@
   border-radius: 8px;
   border: 1px solid var(--border-color);
 }
+.left::before{
+  content: " ";
+  background-color: #C7BD8D;
+  width: 75px;
+  height: 2px;
+  position: relative;
+  top: 20px;
+  right: -465px;
+}
+
+.right::before{
+  content: " ";
+  background-color: #C7BD8D;
+  width: 75px;
+  height: 2px;
+  position: relative;
+  top: 20px;
+  left: -25px;
+}
+
+.timeline {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* The actual timeline (the vertical ruler) */
+.timeline::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  background-color: #C7BD8D;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -3px;
+}
 
 .inputGroup {
   display: flex;

@@ -124,38 +124,16 @@ function ByDate({ onDateChange }: ByDateProps) {
           {data.data.Events.length > 0 && (
             <section>
               <h2>Events ({data.data.Events.length})</h2>
-              {data.data.Events.slice(0, visibleEventsCount).map((event, index) => (
-                <EventCard key={index} event={event} />
-              ))}
+              <div className={styles.timeline}>
+                {data.data.Events.slice(0, visibleEventsCount).map((event, index) => (
+                  <EventCard 
+                    key={index} 
+                    event={event}
+                    position={index % 2 === 0 ? 'left' : 'right'}
+                  />
+                ))}
+              </div>
               {visibleEventsCount < data.data.Events.length && (
-                <p style={{ textAlign: 'center', color: 'var(--text-color)' }}>
-                  Scroll for more...
-                </p>
-              )}
-            </section>
-          )}
-
-          {data.data.Births.length > 0 && (
-            <section>
-              <h2>Births ({data.data.Births.length})</h2>
-              {data.data.Births.slice(0, visibleBirthsCount).map((event, index) => (
-                <EventCard key={index} event={event} />
-              ))}
-              {visibleBirthsCount < data.data.Births.length && (
-                <p style={{ textAlign: 'center', color: 'var(--text-color)' }}>
-                  Scroll for more...
-                </p>
-              )}
-            </section>
-          )}
-
-          {data.data.Deaths.length > 0 && (
-            <section>
-              <h2>Deaths ({data.data.Deaths.length})</h2>
-              {data.data.Deaths.slice(0, visibleDeathsCount).map((event, index) => (
-                <EventCard key={index} event={event} />
-              ))}
-              {visibleDeathsCount < data.data.Deaths.length && (
                 <p style={{ textAlign: 'center', color: 'var(--text-color)' }}>
                   Scroll for more...
                 </p>

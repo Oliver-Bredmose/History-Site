@@ -56,13 +56,16 @@ function Today() {
       
       <section>
         <h2>Events ({data.data.Events.length})</h2>
+       <div className={styles.timeline}>
+
         {data.data.Events.slice(0, visibleEventsCount).map((event, index) => (
           <EventCard 
             key={index} 
             event={event}
-            position={index % 2 === 0 ? 'left' : 'right'}  // ← Tilføj dette
+            position={index % 2 === 0 ? 'left' : 'right'}  
           />
         ))}
+       </div>
         {visibleEventsCount < data.data.Events.length && (
           <p style={{ textAlign: 'center', color: 'var(--text-color)' }}>
             Scroll for more...
@@ -70,33 +73,6 @@ function Today() {
         )}
       </section>
 
-      <section>
-        <h2>Births ({data.data.Births.length})</h2>
-        <div className={styles.timelineContainer}>
-          {data.data.Births.slice(0, visibleBirthsCount).map((event, index) => (
-            <EventCard key={index} event={event} position={index % 2 === 0 ? 'left' : 'right'} />
-          ))}
-        </div>
-        {visibleBirthsCount < data.data.Births.length && (
-          <p className={styles.scrollIndicator}>
-            Scroll for more...
-          </p>
-        )}
-      </section>
-
-      <section>
-        <h2>Deaths ({data.data.Deaths.length})</h2>
-        <div className={styles.timelineContainer}>
-          {data.data.Deaths.slice(0, visibleDeathsCount).map((event, index) => (
-            <EventCard key={index} event={event} position={index % 2 === 0 ? 'left' : 'right'} />
-          ))}
-        </div>
-        {visibleDeathsCount < data.data.Deaths.length && (
-          <p className={styles.scrollIndicator}>
-            Scroll for more...
-          </p>
-        )}
-      </section>
     </div>
   );
 }

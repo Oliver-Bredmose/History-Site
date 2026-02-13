@@ -7,6 +7,7 @@ import Header from './Components/Header/Header.tsx';
 import BackToTop from './Components/BackToTop/BackToTop.tsx';
 
 function App() {
+  const [sinceYear, setSinceYear] = useState<string>('1947');
   const [byDate, setByDate] = useState<string>('12/02');
 
   const handleByDateChange = (date: string) => {
@@ -23,13 +24,14 @@ function App() {
     <BrowserRouter>
       <div style={{ padding: '2rem' }}>
         <Header 
+          onSinceYearChange={setSinceYear} 
           onByDateChange={handleByDateChange}
         />
 
         <Routes>
           <Route path="/" element={<Today />} />
           <Route path="/by-date" element={<ByDate onDateChange={setByDate} />} />
-          <Route path="/since" element={<Since />} />
+          <Route path="/since" element={<Since year={sinceYear} />} />
         </Routes>
 
         <BackToTop />

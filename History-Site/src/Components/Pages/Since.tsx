@@ -3,11 +3,14 @@ import type { HistoryData, HistoryEvent } from '../Types/History';
 import EventCard from '../EventCard/EventCard';
 import styles from './Since.module.scss';
 
-function Since() {
+interface SinceProps {
+  year: string;
+}
+
+function Since({ year }: SinceProps) {
   const [data, setData] = useState<HistoryData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [year, setYear] = useState<string>('2000');
   const [filteredEvents, setFilteredEvents] = useState<HistoryEvent[]>([]);
   const [filteredBirths, setFilteredBirths] = useState<HistoryEvent[]>([]);
   const [filteredDeaths, setFilteredDeaths] = useState<HistoryEvent[]>([]);
@@ -74,90 +77,38 @@ function Since() {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
-      <div className={styles.form}>
-        <div className={styles.inputGroup}>
-          <label htmlFor="yearInput" className={styles.label}>Select a year:</label>
-          <input
-            id="yearInput"
-            type="number"
-            min="1"
-            max={new Date().getFullYear()}
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
-            className={styles.input}
-            placeholder="Enter year"
-          />
-        </div>
-      </div>
+    <div className={styles.container}>
+      {year && (
+        <>
+          <div className={styles.summary}>
+            Showing events from year <strong>{year}</strong> and onwards on this day ({data?.date})
+          </div>
 
-      <div className={styles.timelineContainer}>
-        {year && (
-          <>
-            <div className={styles.summary}>
-              Showing events from year <strong>{year}</strong> and onwards on this day ({data?.date})
-            </div>
-
-            {filteredEvents.length > 0 && (
-              <section>
-                <h2>Events ({filteredEvents.length})</h2>
+          {filteredEvents.length > 0 && (
+            <section>
+              <h2>Events ({filteredEvents.length})</h2>
+              <div className={styles.timeline}>
                 {filteredEvents.slice(0, visibleEventsCount).map((event, index) => (
                   <EventCard 
                     key={index} 
-                    event={event} 
+                    event={event}
                     position={index % 2 === 0 ? 'left' : 'right'}
                   />
                 ))}
-                {visibleEventsCount < filteredEvents.length && (
-                  <p style={{ textAlign: 'center', color: 'var(--text-color)' }}>
-                    Scroll for more...
-                  </p>
-                )}
-              </section>
-            )}
+              </div>
+              {visibleEventsCount < filteredEvents.length && (
+                <p style={{ textAlign: 'center', color: 'var(--text-color)' }}>
+                  Scroll for more...
+                </p>
+              )}
+            </section>
+          )}
 
-            {filteredBirths.length > 0 && (
-              <section>
-                <h2>Births ({filteredBirths.length})</h2>
-                {filteredBirths.slice(0, visibleBirthsCount).map((event, index) => (
-                  <EventCard 
-                    key={index} 
-                    event={event} 
-                    position={index % 2 === 0 ? 'left' : 'right'}
-                  />
-                ))}
-                {visibleBirthsCount < filteredBirths.length && (
-                  <p style={{ textAlign: 'center', color: 'var(--text-color)' }}>
-                    Scroll for more...
-                  </p>
-                )}
-              </section>
-            )}
-
-            {filteredDeaths.length > 0 && (
-              <section>
-                <h2>Deaths ({filteredDeaths.length})</h2>
-                {filteredDeaths.slice(0, visibleDeathsCount).map((event, index) => (
-                  <EventCard 
-                    key={index} 
-                    event={event} 
-                    position={index % 2 === 0 ? 'left' : 'right'}
-                  />
-                ))}
-                {visibleDeathsCount < filteredDeaths.length && (
-                  <p style={{ textAlign: 'center', color: 'var(--text-color)' }}>
-                    Scroll for more...
-                  </p>
-                )}
-              </section>
-            )}
-
-            {filteredEvents.length === 0 && filteredBirths.length === 0 && filteredDeaths.length === 0 && (
-              <p className={styles.noResults}>No events found from year {year} onwards on this day.</p>
-            )}
-          </>
-        )}
-      </div>
+          {filteredEvents.length === 0 && filteredBirths.length === 0 && filteredDeaths.length === 0 && (
+            <p className={styles.noResults}>No events found from year {year} onwards on this day.</p>
+          )}
+        </>
+      )}
     </div>
   );
 }
